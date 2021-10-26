@@ -21,11 +21,13 @@ group  <- factor(c(1,1,1,2,2,2))
 
 x     <- read.table(args[1], sep='\t', row.names=1)
 y     <- DGEList(counts=x,group=group)
-keep  <- filterByExpr(y)        ## The filterByExpr function keeps rows that have worthwhile counts in 
+## The filterByExpr function keeps rows that have worthwhile counts in 
                                 ## a minumum number of samples. This one's probably unnecessary but 
                                 ## let's add it just in case.
-y     <- y[keep, , keep.lib.sizes=FALSE]
-y     <- calcNormFactors(y)     ## normalization!
+# keep  <- filterByExpr(y)        
+# y     <- y[keep, , keep.lib.sizes=FALSE]
+## normalization!
+y     <- calcNormFactors(y, method="TMM")     
 y     <- estimateDisp(y)
 et    <- exactTest(y)
 tab   <- topTags(et, nrow(x))
